@@ -15,6 +15,7 @@ class UserController extends Controller
     {
         // $users = User::all();
         return view('user.index');
+
     }
 
     /**
@@ -93,44 +94,44 @@ class UserController extends Controller
         ]);
     }
 
-    public function apiUsers()
-    {
-        $users = User::all();
+    // public function apiUsers()
+    // {
+    //     $users = User::all();
 
-        return DataTables::of($users)
-            ->addColumn('action', function ($users) {
-                return '<a onclick="editForm(' . $users->id . ')" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-edit"></i> Edit</a> ' .
-                '<a onclick="deleteData(' . $users->id . ')" class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-trash"></i> Delete</a>';
-            })
-            ->rawColumns(['action'])->make(true);
-    }
+    //     return DataTables::of($users)
+    //         ->addColumn('action', function ($users) {
+    //             return '<a onclick="editForm(' . $users->id . ')" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-edit"></i> Edit</a> ' .
+    //             '<a onclick="deleteData(' . $users->id . ')" class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-trash"></i> Delete</a>';
+    //         })
+    //         ->rawColumns(['action'])->make(true);
+    // }
 
-    public function ImportExcel(Request $request)
-    {
-        //Validasi
-        $this->validate($request, [
-            'file' => 'required|mimes:xls,xlsx',
-        ]);
+    // public function ImportExcel(Request $request)
+    // {
+    //     //Validasi
+    //     $this->validate($request, [
+    //         'file' => 'required|mimes:xls,xlsx',
+    //     ]);
 
-        if ($request->hasFile('file')) {
-            //UPLOAD FILE
-            $file = $request->file('file'); //GET FILE
-            Excel::import(new SuppliersImport, $file); //IMPORT FILE
-            return redirect()->back()->with(['success' => 'Upload file data suppliers !']);
-        }
+    //     if ($request->hasFile('file')) {
+    //         //UPLOAD FILE
+    //         $file = $request->file('file'); //GET FILE
+    //         Excel::import(new SuppliersImport, $file); //IMPORT FILE
+    //         return redirect()->back()->with(['success' => 'Upload file data suppliers !']);
+    //     }
 
-        return redirect()->back()->with(['error' => 'Please choose file before!']);
-    }
+    //     return redirect()->back()->with(['error' => 'Please choose file before!']);
+    // }
 
-    public function exportSuppliersAll()
-    {
-        $suppliers = Supplier::all();
-        $pdf = PDF::loadView('suppliers.SuppliersAllPDF', compact('suppliers'));
-        return $pdf->download('suppliers.pdf');
-    }
+    // public function exportSuppliersAll()
+    // {
+    //     $suppliers = Supplier::all();
+    //     $pdf = PDF::loadView('suppliers.SuppliersAllPDF', compact('suppliers'));
+    //     return $pdf->download('suppliers.pdf');
+    // }
 
-    public function exportExcel()
-    {
-        return (new ExportSuppliers)->download('suppliers.xlsx');
-    }
+    // public function exportExcel()
+    // {
+    //     return (new ExportSuppliers)->download('suppliers.xlsx');
+    // }
 }

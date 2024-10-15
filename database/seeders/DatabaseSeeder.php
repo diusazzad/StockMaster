@@ -18,5 +18,38 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
+
+
+        // $seeders=[
+        //     'CustomerSeeder',
+        //     'SupplierSeeder',
+        //     'CategorySeeder',
+        //     'UnitSeeder',
+        //     'ProductSeeder',
+        //     'OrderSeeder',
+        //     'OrderDetailSeeder',
+        //     'PurchaseSeeder',
+        //     'PurchaseDetailSeeder',
+        //     'QuotationSeeder',
+        //     'QuotationDetailSeeder',
+        //     'NotificationSeeder',
+
+
+        // ];
+        // $this->call($seeders);
+        $this->call([
+            CustomerSeeder::class,
+            // SupplierSeeder::class,
+            // CategorySeeder::class,
+            // UnitSeeder::class,
+            // ProductSeeder::class,
+            // OrderSeeder::class,
+            // OrderDetailSeeder::class,
+            // PurchaseSeeder::class,
+            // PurchaseDetailSeeder::class,
+            // QuotationSeeder::class,
+            // QuotationDetailSeeder::class,
+            // NotificationSeeder::class
+        ]);
     }
 }

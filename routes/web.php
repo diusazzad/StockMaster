@@ -1,57 +1,102 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\ExamplesController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\LandingController;
+use App\Http\Controllers\PermissionBasedAccess;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductEnter;
 use App\Http\Controllers\ProductsExit;
 use App\Http\Controllers\ProductsIn;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RoleOrPermission;
+use App\Http\Controllers\RolesAndPermissionsController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\TestController;
+use App\Http\Controllers\TestSpatiePermission;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
+
+Route::get('/php', function () {
+    return phpinfo();
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
 
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+// Route::get('/dashboard', function () {
+//     return view('dashboard');
+// })->middleware(['auth', 'verified'])->name('dashboard');
+
+
+Route::middleware(['auth','verified'])->controller(ProfileController::class)->group(function(){
+        Route::get('/dashboard', 'dashboard')->name('dashboard');
+        Route::get('/dashboard', function () {
+            return view('dashboard');
+        })->middleware(['auth', 'verified'])->name('dashboard');
+        // Route::get('/dashboard', 'dashboard')->name('dashboard');
+        Route::get('/profile',  'edit')->name('profile.edit');
+        Route::patch('/profile',  'update')->name('profile.update');
+        Route::delete('/profile', 'destroy')->name('profile.destroy');
 });
 
-
-
-
-
-Route::resource('/user', UserController::class);
-Route::get('/apiUser', 'UserController@apiUsers')->name('api.users');
-
-Route::resource('/productsIn', ProductEnter::class);
-
-Route::resource('/categories', CategoryController::class);
-Route::get('/apiCategories', 'CategoryController@apiCategories')->name('api.categories');
-Route::get('/exportCategoriesAll', 'CategoryController@exportCategoriesAll')->name('exportPDF.categoriesAll');
-Route::get('/exportCategoriesAllExcel', 'CategoryController@exportExcel')->name('exportExcel.categoriesAll');
-
-Route::resource('/customers', CustomerController::class);
-
-Route::resource('/sales', SaleController::class);
-
-Route::resource('/suppliers', SupplierController::class);
-
-Route::resource('/products', ProductController::class);
-
-Route::resource('/productsOut', ProductsExit::class);
-
-Route::resource('/productsIn', ProductsIn::class);
 
 require __DIR__ . '/auth.php';
+
+
+
+// // Create A Permission
+// Route::get('/permissions/create', [TestSpatiePermission::class, 'create'])->name('spatie.permission.create');
+// Route::post('/permissions', [TestSpatiePermission::class, 'store'])->name('spatie.permissions.store');
+// //
+// Route::get('/permissions/assign', [TestSpatiePermission::class, 'assignForm'])->name('permissions.assign');
+// Route::post('/permissions/assign', [TestSpatiePermission::class, 'assign'])->name('permissions.assign');
+
+// // #Sync Permissions To A Role
+// Route::get('/permissions/sync', [TestSpatiePermission::class, 'syncForm'])->name('permissions.sync');
+// Route::post('/permissions/sync', [TestSpatiePermission::class, 'sync'])->name('permissions.sync');
+
+// // Remove Permission From A Role
+// Route::get('/permissions/remove', [TestSpatiePermission::class, 'removeForm'])->name('permissions.remove');
+// Route::post('/permissions/remove', [TestSpatiePermission::class, 'remove'])->name('permissions.remove');
+
+// //  Guard Name
+// // Get Permissions For A User
+// Route::get('permission/users/{id}', [TestSpatiePermission::class, 'show'])->name('users.show');
+
+// // Route to show the form for giving permissions
+// Route::get('/permissions/give', [TestSpatiePermission::class, 'giveForm'])->name('permissions.give');
+
+// // Route to handle the assignment of permissions
+// Route::post('/permissions/give', [TestSpatiePermission::class, 'give'])->name('permissions.give.store');
+
+// // Route to show the form for giving permissions
+// Route::get('direct/permissions/give', [TestSpatiePermission::class, 'directPermissionGiveForm'])->name('permissions.give');
+
+// // Route to handle the assignment of permissions
+// Route::post('direct/permissions/give', [TestSpatiePermission::class, 'directPermissionGive'])->name('permissions.give.store');
+
+
+
+// #########################
+// Home Page
+Route::controller(LandingController::class)->group(function () {
+    Route::get('/', 'index');
+});
+
+
+Route::prefix('/test')->controller(TestController::class)->group(function(){
+    Route::get('/customer', 'customerRetrive');
+    Route::get('/supplier', 'supplierRetrive');
+    Route::get('/category', 'categoryRetrive');
+    Route::get('/unit', 'unitRetrive');
+    Route::get('/product', 'productRetrive');
+});
