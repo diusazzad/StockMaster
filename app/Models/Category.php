@@ -17,10 +17,15 @@ class Category extends Model
     * Get all of the comments for the Category
     *
     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-    */
-   public function products(): HasMany
+    */   
+    public function products(): HasMany
    {
        return $this->hasMany(Product::class, );
+   }
+
+   public function orders(): HasMany
+   {
+       return $this->hasMany(Order::class);
    }
  
 }

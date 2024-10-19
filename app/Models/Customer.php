@@ -23,5 +23,14 @@ class Customer extends Model
     {
         return $this->hasMany(Quotation::class);
     }
+    /**
+     * Get all of the comments for the Customer
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class);
+    }
     
 }
